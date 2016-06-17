@@ -1,0 +1,26 @@
+{
+  "name": "aws-lambda-testing",
+  "version": "0.0.1",
+  "description": "class to generate instance to test the lambda functions",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cereceres/aws-lambda-testing.git"
+  },
+  "keywords": [
+    "lambda",
+    "aws",
+    "amazon",
+    "function",
+    "test"
+  ],
+  "author": "Jesus Cereceres",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Cereceres/aws-lambda-testing/issues"
+  },
+  "homepage": "https://github.com/Cereceres/aws-lambda-testing#readme"
+}
