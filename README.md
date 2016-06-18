@@ -57,7 +57,7 @@ This method added the context to be passed like thisArg to the handler and retur
 
 #### `Ctx object`
 The ctx object has the method done, success and fail. If the error or error like
-passed to done or fail method is not controlled by the callback is passed to reject method. 
+passed to done or fail method is not controlled by the callback is passed to reject method.
 # Testing
 
 Running the tests
@@ -68,7 +68,7 @@ npm test
 
 
 ## Contributing
-In lieu of a formal style guide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code.  For any bugs report please contact to me via e-mail: cereceres@ciencias.unam.mx.
+In lieu of a formal style guide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code.  For any bugs report please contact to me via e-mail: dev@futurecommerce.mx
 
 ## Licence
 The MIT License (MIT)
