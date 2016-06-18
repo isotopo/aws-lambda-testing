@@ -1,7 +1,9 @@
 # aws-lambda-testing
 Module to test the aws-lambda functions
 
-[![Build Status](https://travis-ci.org/4yopping/aws-lambda-testing.svg?branch=master)](https://travis-ci.org/4yopping/aws-lambda-testing)
+[![Build Status](https://travis-ci.org/Cereceres/aws-lambda-testing.svg?branch=master)](https://travis-ci.org/Cereceres/aws-lambda-testing)
+
+[![Inline docs](http://inch-ci.org/github/Cereceres/aws-lambda-testing.svg?branch=master)](http://inch-ci.org/github/Cereceres/aws-lambda-testing)
 
 
 aws-lambda-testing for JavaScript
@@ -68,7 +70,7 @@ npm test
 
 
 ## Contributing
-In lieu of a formal style guide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code.  For any bugs report please contact to me via e-mail: dev@futurecommerce.mx
+In lieu of a formal style guide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code.  For any bugs report please contact to me via e-mail: dev@futurecommerce.mx.
 
 ## Licence
 The MIT License (MIT)
