@@ -70,13 +70,18 @@ class awsTest {
     return this
   }
   cb (resolve, reject, error, data) {
-    this.cbCalled = true
-    if (this._cb) {
-      return resolve(this._cb.apply(this.ctx, [error, data]))
-    } else if (error) {
-      return reject(error)
-    }
-    resolve(data)
+      try {
+          this.cbCalled = true
+          if (this._cb) {
+            return resolve(this._cb.apply(this.ctx, [error, data]))
+          } else if (error) {
+            return reject(error)
+          }
+          resolve(data)
+      } catch (err) {
+          reject(err)
+      }
+
   }
 }
 module.exports = awsTest
