@@ -14,6 +14,7 @@ class awsTest {
     this.cbCalled = false
   }
   call (params, callback) {
+    if(typeof this.handler !== 'function') return this
     if (typeof params === 'function' && !callback) {
       callback = params
       params = undefined
@@ -23,13 +24,8 @@ class awsTest {
     let self = this
     let promise = new Promise(function (resolve, reject) {
       let done = function (error, data) {
-        if (!self.cbCalled) {
-          self.cb(resolve, reject, error, data)
-          return
-        } else if (error) {
-          reject(error)
-          return
-        }
+        if (!self.cbCalled) return self.cb(resolve, reject, error, data)
+        else if (error) return reject(error)
         resolve(data)
       }
       let ctx = {
@@ -54,7 +50,7 @@ class awsTest {
     return promise
   }
   addHandler (handler) {
-    this.handler = handler
+    if(typeof this.handler === 'function') this.handler = handler
     return this
   }
   addParams (params) {
