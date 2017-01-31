@@ -14,7 +14,7 @@ class awsTest {
     this.cbCalled = false
   }
   call (params, callback) {
-    if(typeof this.handler !== 'function') return this
+    if(typeof this.handler !== 'function') return Promise.resolve()
     if (typeof params === 'function' && !callback) {
       callback = params
       params = undefined
