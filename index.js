@@ -5,28 +5,24 @@
 */
 class awsTest {
   constructor (handler, params, cb, ctx) {
-    this.ctx = {}
-    this.params = {}
-    handler && (this.handler = handler)
-    cb && (this._cb = cb)
-    ctx && (this.ctx = ctx)
-    params && (this.params = params)
-    this.cbCalled = false
+    this.ctx = ctx || {}
+    this.params = params || {}
+    this._cb = function () {}
+    this.handler = handler || function () {}
+    (typeof cb === 'function') && (this._cb = cb)
   }
   call (params, callback) {
-    if(typeof this.handler !== 'function') return Promise.resolve()
+    if(typeof this.handler !== 'function' || this.handler.called) return Promise.resolve()
     if (typeof params === 'function' && !callback) {
       callback = params
       params = undefined
     }
-    (typeof callback === 'function') && (this._cb = callback)
-    params && (this.params = params)
+    (typeof callback === 'function') && this.addCallback(callback)
+    this.params = params
     let self = this
-    let promise = new Promise(function (resolve, reject) {
+    return new Promise(function (resolve, reject) {
       let done = function (error, data) {
-        if (!self.cbCalled) return self.cb(resolve, reject, error, data)
-        else if (error) return reject(error)
-        resolve(data)
+        self.cb(resolve, reject, error, data)
       }
       let ctx = {
         done: done,
@@ -46,11 +42,9 @@ class awsTest {
         reject(e)
       }
     })
-    this.cbCalled = false
-    return promise
   }
   addHandler (handler) {
-    if(typeof this.handler === 'function') this.handler = handler
+    if(typeof handler === 'function') this.handler = handler
     return this
   }
   addParams (params) {
@@ -58,7 +52,7 @@ class awsTest {
     return this
   }
   addCallback (cb) {
-    this._cb = cb
+    if(typeof cb === 'function') this._cb = cb
     return this
   }
   addCtx (ctx) {
@@ -66,18 +60,14 @@ class awsTest {
     return this
   }
   cb (resolve, reject, error, data) {
-      try {
-          this.cbCalled = true
-          if (this._cb) {
-            return resolve(this._cb.apply(this.ctx, [error, data]))
-          } else if (error) {
-            return reject(error)
-          }
-          resolve(data)
-      } catch (err) {
-          reject(err)
-      }
-
+    try {
+      this.handler.called = true
+      if (this._cb) this._cb.call(this.ctx, error, data)
+      if(error) return reject(error)
+      resolve(data)
+    } catch (err) {
+      reject(err)
+    }
   }
 }
 module.exports = awsTest
