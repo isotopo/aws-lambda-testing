@@ -8,11 +8,12 @@ class awsTest {
     this.timeout = 1000
     this.ctx = ctx || {}
     this.params = params || {}
-    this._cb = function () {}
-    this.handler = handler || function () {}
+    this.handler = handler || function (event,ctx,cb) {
+      cb(null,{})
+    }
     (typeof cb === 'function') && (this._cb = cb)
   }
-  call (params, callback) {
+  exec (params, callback) {
     if(typeof this.handler !== 'function' || this.handler.called) return Promise.resolve()
     if (typeof params === 'function' && !callback) {
       callback = params
@@ -21,19 +22,20 @@ class awsTest {
     (typeof callback === 'function') && this.addCallback(callback)
     this.params = params
     let self = this
-    let called
     return new Promise(function (resolve, reject) {
+      self.called = false
       /**
       * @function
       * @param {object} - error
       * @param {object} - data
       */
       let cb = function (error, data) {
+        // set self.called to true here
+        if(self.called) return
+        self.called = true
         self.handler.called = true
         // if there a callback to manage the result is exec and update the data
         if (self._cb) data = self._cb.call(self.ctx, error, data)
-        // set called to true here
-        called = true
         // if there a error and is not managed the promise is rejected
         if(error && !self._cb) return reject(error)
         // resolve the promise with data
@@ -53,8 +55,8 @@ class awsTest {
       }
       // timeout to reject the promise if timeout var is broken
       setTimeout(function () {
-        if(called) return
-        let error =  new Error('TimeOut of ' + self.timeout + 'is broken' )
+        if(self.called) return
+        let error =  new Error('TimeOut of ' + self.timeout + ' is broken' )
         cb(error, null)
       }, self.timeout);
       // exec the handler
@@ -83,6 +85,7 @@ class awsTest {
   }
  setTimeout(timeout){
    this.timeout = timeout
+   return this
  }
 }
 module.exports = awsTest

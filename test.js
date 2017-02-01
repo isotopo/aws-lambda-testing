@@ -10,7 +10,7 @@ let i = 0
 describe('The test to aws-tester', function () {
   it('The test for the callback', function (done) {
     let called
-    awsTest.call({test: 'test'}, function (error, res) {
+    awsTest.exec({test: 'test'}, function (error, res) {
       assert(!error)
       called = true
       assert(res === 'test')
@@ -28,7 +28,7 @@ describe('The test to aws-tester', function () {
       assert(params.test === 'test')
       cb(null, 'test')
     })
-    .call({test: 'test'}, function (error, res) {
+    .exec({test: 'test'}, function (error, res) {
       assert(!error)
       called = true
       assert(res === 'test')
@@ -45,7 +45,7 @@ describe('The test to aws-tester', function () {
     .addHandler(function (params, ctx, cb) {
       cb(null, 'test')
     })
-    .call(function (error, res) {
+    .exec(function (error, res) {
       called = true
     })
     .then(function (res) {
@@ -58,7 +58,7 @@ describe('The test to aws-tester', function () {
     .addHandler(function (params, ctx, callback) {
       callback(null, 'data')
     })
-    .call(function (error, res) {
+    .exec(function (error, res) {
       ++i
       assert(res === 'data')
     }).then(function (res) {
@@ -72,7 +72,7 @@ describe('The test to aws-tester', function () {
     .addHandler(function (params, ctx, callback) {
       callback(null, 'data')
     })
-    .call(function () {
+    .exec(function () {
       throw new Error('test of error')
     })
     .catch(function (error) {
@@ -87,23 +87,36 @@ describe('The test to aws-tester', function () {
     .addHandler(function (params, ctx, callback) {
       ctx.fail('error')
     })
-    .call(function (err) {
+    .exec(function (err) {
       called = true
       assert(err)
       done()
     })
   })
 
-  it('the error is catched when fail is used', function (done) {
-    let called = false
+  it('the error is throw when timeout is broken', function (done) {
     awsTest
     .addHandler(function (params, ctx, callback) {
-      setTimeout(function () {
-
+      let timeout = setTimeout(function () {
+        clearTimeout(timeout)
+        callback(null,{})
       }, 2000);
     })
-    .call(function (err) {
-      called = true
+    .exec(function (err) {
+      assert(err)
+      done()
+    })
+  })
+
+  it('should change the time out', function (done) {
+    awsTest
+    .setTimeout(4000)
+    .addHandler(function (params, ctx, callback) {
+      let timeout = setTimeout(function () {
+        callback(null,{})
+      }, 5000);
+    })
+    .exec(function (err) {
       assert(err)
       done()
     })

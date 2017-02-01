@@ -45,7 +45,7 @@ To instance the aws-lambda-testing you can pass the handler to test, the params 
 used when the handler is called and the context to be used to call it.
 
 ### `Instance aws-lambda-testing`
-#### `aws-lambda-testing.call([params,callback])`
+#### `aws-lambda-testing.exec([params,callback])`
 This method call the handler and return a promise, this promise is resolve with the return valur of callback passed to this
 function and rejected with every error catched or values passed to ctx.fail or ctx.done.
 #### `aws-lambda-testing.addHandler(handler)`
@@ -56,6 +56,9 @@ This method added the params to be passed to the handler and return itself insta
 This method added the callback to be passed to the handler and return itself instance.
 #### `aws-lambda-testing.addCtx(ctx)`
 This method added the context to be passed like thisArg to the handler and return itself instance.
+
+#### `aws-lambda-testing.setTimeout(timeout)`
+This method added the timeout, if the timeout in call is broken a error is throw and passed to callback or promise if is not managed.
 
 #### `Ctx object`
 The ctx object has the method done, success and fail. If the error or error like
@@ -70,7 +73,7 @@ npm test
 
 
 ## Contributing
-In lieu of a formal style guide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code.  For any bugs report please contact to me via e-mail: dev@futurecommerce.mx.
+In lieu of a formal style guide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code.  For any bugs report please contact to me via e-mail: cereceres@ciencias.unam.mx.
 
 ## Licence
 The MIT License (MIT)
