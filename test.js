@@ -90,10 +90,22 @@ describe('The test to aws-tester', function () {
     .call(function (err) {
       called = true
       assert(err)
+      done()
     })
-    .catch((err) => {
+  })
+
+  it('the error is catched when fail is used', function (done) {
+    let called = false
+    awsTest
+    .addHandler(function (params, ctx, callback) {
+      setTimeout(function () {
+
+      }, 2000);
+    })
+    .call(function (err) {
+      called = true
       assert(err)
-      if(called) done()
-    });
+      done()
+    })
   })
 })

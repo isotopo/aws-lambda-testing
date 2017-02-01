@@ -5,6 +5,7 @@
 */
 class awsTest {
   constructor (handler, params, cb, ctx) {
+    this.timeout = 1000
     this.ctx = ctx || {}
     this.params = params || {}
     this._cb = function () {}
@@ -20,11 +21,28 @@ class awsTest {
     (typeof callback === 'function') && this.addCallback(callback)
     this.params = params
     let self = this
+    let called
     return new Promise(function (resolve, reject) {
-      let done = function (error, data) {
-        self.cb(resolve, reject, error, data)
+      /**
+      * @function
+      * @param {object} - error
+      * @param {object} - data
+      */
+      let cb = function (error, data) {
+        self.handler.called = true
+        // if there a callback to manage the result is exec and update the data
+        if (self._cb) data = self._cb.call(self.ctx, error, data)
+        // set called to true here
+        called = true
+        // if there a error and is not managed the promise is rejected
+        if(error && !self._cb) return reject(error)
+        // resolve the promise with data
+        resolve(data)
       }
+      let done = cb
+      // build the ctx object
       let ctx = {
+        // done function
         done: done,
         success: function (data) {
           done(null, data)
@@ -33,9 +51,13 @@ class awsTest {
           done(error, null)
         }
       }
-      let cb = function (error, data) {
-        self.cb(resolve, reject, error, data)
-      }
+      // timeout to reject the promise if timeout var is broken
+      setTimeout(function () {
+        if(called) return
+        let error =  new Error('TimeOut of ' + self.timeout + 'is broken' )
+        cb(error, null)
+      }, self.timeout);
+      // exec the handler
       try {
         self.handler.call(self.ctx, self.params, ctx, cb)
       } catch (e) {
@@ -59,15 +81,8 @@ class awsTest {
     this.ctx = ctx
     return this
   }
-  cb (resolve, reject, error, data) {
-    try {
-      this.handler.called = true
-      if (this._cb) this._cb.call(this.ctx, error, data)
-      if(error) return reject(error)
-      resolve(data)
-    } catch (err) {
-      reject(err)
-    }
-  }
+ setTimeout(timeout){
+   this.timeout = timeout
+ }
 }
 module.exports = awsTest
