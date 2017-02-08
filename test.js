@@ -93,32 +93,4 @@ describe('The test to aws-tester', function () {
       done()
     })
   })
-
-  it('the error is throw when timeout is broken', function (done) {
-    awsTest
-    .addHandler(function (params, ctx, callback) {
-      let timeout = setTimeout(function () {
-        clearTimeout(timeout)
-        callback(null,{})
-      }, 2000);
-    })
-    .exec(function (err) {
-      assert(err)
-      done()
-    })
-  })
-
-  it('should change the time out', function (done) {
-    awsTest
-    .setTimeout(4000)
-    .addHandler(function (params, ctx, callback) {
-      let timeout = setTimeout(function () {
-        callback(null,{})
-      }, 5000);
-    })
-    .exec(function (err) {
-      assert(err)
-      done()
-    })
-  })
 })

@@ -10,8 +10,8 @@ class awsTest {
     this.params = params || {}
     this.handler = handler || function (event,ctx,cb) {
       cb(null,{})
-    }
-    (typeof cb === 'function') && (this._cb = cb)
+    };
+    typeof cb === 'function' && (this._cb = cb)
   }
   exec (params, callback) {
     if(typeof this.handler !== 'function' || this.handler.called) return Promise.resolve()
