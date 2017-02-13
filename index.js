@@ -45,7 +45,7 @@ class awsTest {
       let ctx = {
         // done function
         done: done,
-        success: function (data) {
+        succeed: function (data) {
           done(null, data)
         },
         fail: function (error) {

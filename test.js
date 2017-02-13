@@ -43,9 +43,38 @@ describe('The test to aws-tester', function () {
     let called
     awsTest
     .addHandler(function (params, ctx, cb) {
-      cb(null, 'test')
+      ctx.succeed(null, 'test')
     })
     .exec(function (error, res) {
+      called = true
+    })
+    .then(function (res) {
+      if(called) done()
+    })
+  })
+
+  it('The test for the callback with done', function (done) {
+    let called
+    awsTest
+    .addHandler(function (params, ctx, cb) {
+      ctx.done(null, 'test')
+    })
+    .exec(function (error, res) {
+      called = true
+    })
+    .then(function (res) {
+      if(called) done()
+    })
+  })
+
+  it('The test for the callback with fail', function (done) {
+    let called
+    awsTest
+    .addHandler(function (params, ctx, cb) {
+      ctx.fail('error')
+    })
+    .exec(function (error, res) {
+      assert(error)
       called = true
     })
     .then(function (res) {
