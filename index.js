@@ -61,7 +61,8 @@ class awsTest {
     })
   }
   addHandler (handler) {
-    if(typeof handler === 'function') this.handler = handler
+    handler && (handler.called = false);
+    (typeof handler === 'function') && (this.handler = handler);
     return this
   }
   addParams (params) {
@@ -69,7 +70,7 @@ class awsTest {
     return this
   }
   addCallback (cb) {
-    if(typeof cb === 'function') this._cb = cb
+    (typeof cb === 'function') && (this._cb = cb)
     return this
   }
   addCtx (ctx) {
