@@ -8,7 +8,25 @@ let awsTest = new AwsTest(function (params, ctx, cb) {
 })
 let i = 0
 describe('The test to aws-tester', function () {
-  it('The test for the callback', function (done) {
+
+  it('should throw a error if handler is not a function', function () {
+    try {
+      awsTest.addHandler()
+    } catch (err) {
+      assert(err)
+    }
+
+  })
+
+  it('should throw a error if is axec without a handler', function () {
+    try {
+      new AwsTest().exec()
+    } catch (err) {
+      assert(err)
+    }
+
+  })
+  it('should exec the callback passed', function (done) {
     let called
     awsTest.exec({test: 'test'}, function (error, res) {
       assert(!error)
