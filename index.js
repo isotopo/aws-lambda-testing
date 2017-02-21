@@ -3,17 +3,19 @@
 * @class This class generate a instance to test the aws lambda handler
 * @param {function} This function is handler
 */
+
+
 class awsTest {
   constructor (handler, params, cb, ctx) {
+    if(handler) this.addHandler(handler)
     this.ctx = ctx || {}
     this.params = params || {}
-    this.handler = handler || function (event,ctx,cb) {
-      cb(null,{})
-    };
     typeof cb === 'function' && (this._cb = cb)
   }
   exec (params, callback) {
-    if(typeof this.handler !== 'function' || this.handler.called) return Promise.resolve()
+    if(typeof this.handler !== 'function') return Promise
+    .reject(new Error('Handler is not s function: ', typeof this.handler))
+    if(this.handler.called) return Promise.resolve()
     if (typeof params === 'function' && !callback) {
       callback = params
       params = undefined
@@ -61,8 +63,9 @@ class awsTest {
     })
   }
   addHandler (handler) {
+    if(typeof handler !== 'function' ) throw new Error('Handler should a functio you pass: ',typeof handler)
+    this.handler = handler
     handler && (handler.called = false);
-    (typeof handler === 'function') && (this.handler = handler);
     return this
   }
   addParams (params) {
