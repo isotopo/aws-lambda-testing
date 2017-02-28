@@ -18,13 +18,8 @@ describe('The test to aws-tester', function () {
 
   })
 
-  it('should throw a error if is axec without a handler', function () {
-    try {
-      new AwsTest().exec()
-    } catch (err) {
-      assert(err)
-    }
-
+  it('should return a promise reject when the handler is not given', function () {
+      return new AwsTest().exec().catch((err) => assert(err))
   })
   it('should exec the callback passed', function (done) {
     let called

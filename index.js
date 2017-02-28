@@ -13,14 +13,16 @@ class awsTest {
     typeof cb === 'function' && (this._cb = cb)
   }
   exec (params, callback) {
-    if(typeof this.handler !== 'function') return Promise
-    .reject(new Error('Handler is not s function: ', typeof this.handler))
+    if(typeof this.handler !== 'function') return Promise.reject(new Error('Handler is not s function: ', typeof this.handler))
+
     if(this.handler.called) return Promise.resolve()
+
     if (typeof params === 'function' && !callback) {
       callback = params
       params = undefined
     }
-    (typeof callback === 'function') && this.addCallback(callback)
+
+    if(typeof callback === 'function') this.addCallback(callback)
     this.params = params
     let self = this
     return new Promise(function (resolve, reject) {
@@ -36,7 +38,13 @@ class awsTest {
         self.called = true
         self.handler.called = true
         // if there a callback to manage the result is exec and update the data
-        if (self._cb) data = self._cb.call(self.ctx, error, data)
+        if (self._cb) {
+          try {
+            data = self._cb.call(self.ctx, error, data) 
+          } catch (err) {
+            return reject(err)
+          }
+        }
         // if there a error and is not managed the promise is rejected
         if(error && !self._cb) return reject(error)
         // resolve the promise with data
