@@ -3,7 +3,9 @@
 * @class This class generate a instance to test the aws lambda handler
 * @param {function} This function is handler
 */
-
+const getRemainingTimeInMillis = function  () {
+  return 30000
+}
 
 class awsTest {
   constructor (handler, params, cb, ctx) {
@@ -24,7 +26,7 @@ class awsTest {
 
     if(typeof callback === 'function') this.addCallback(callback)
     this.params = params
-    let self = this
+    const self = this
     return new Promise(function (resolve, reject) {
       self.called = false
       /**
@@ -32,7 +34,7 @@ class awsTest {
       * @param {object} - error
       * @param {object} - data
       */
-      let cb = function (error, data) {
+      const cb = function (error, data) {
         // set self.called to true here
         if(self.called) return
         self.called = true
@@ -50,9 +52,9 @@ class awsTest {
         // resolve the promise with data
         resolve(data)
       }
-      let done = cb
+      const done = cb
       // build the ctx object
-      let ctx = {
+      const ctx = {
         // done function
         done: done,
         succeed: function (data) {
@@ -60,7 +62,8 @@ class awsTest {
         },
         fail: function (error) {
           done(error, null)
-        }
+        },
+        getRemainingTimeInMillis: getRemainingTimeInMillis,
       }
       // exec the handler
       try {

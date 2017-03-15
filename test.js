@@ -109,6 +109,23 @@ describe('The test to aws-tester', function () {
     })
     .catch(done)
   })
+
+  it('shoudl call the getRemainingTimeInMillis function', function (done) {
+    let i = 0
+    awsTest
+    .addHandler(function (params, ctx, callback) {
+      assert.equal(typeof ctx.getRemainingTimeInMillis , 'function')
+      callback(null, 'data')
+    })
+    .exec(function (error, res) {
+      ++i
+      assert.equal(res , 'data')
+    }).then(function (res) {
+      assert.equal(i, 1)
+      done()
+    })
+    .catch(done)
+  })
   it('the error is catched by the promise if is throw', function (done) {
     awsTest
     .addHandler(function (params, ctx, callback) {
