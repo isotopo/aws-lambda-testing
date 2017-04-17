@@ -7,6 +7,8 @@ const getRemainingTimeInMillis = function  () {
   return 30000
 }
 
+const TIME_OUT= 3000
+
 class awsTest {
   constructor (handler, params, cb, ctx) {
     if(handler) this.addHandler(handler)
@@ -17,7 +19,6 @@ class awsTest {
   exec (params, callback) {
     if(typeof this.handler !== 'function') return Promise.reject(new Error('Handler is not s function: ', typeof this.handler))
 
-    if(this.handler.called) return Promise.resolve()
 
     if (typeof params === 'function' && !callback) {
       callback = params
@@ -28,17 +29,12 @@ class awsTest {
     this.params = params
     const self = this
     return new Promise(function (resolve, reject) {
-      self.called = false
       /**
       * @function
       * @param {object} - error
       * @param {object} - data
       */
       const cb = function (error, data) {
-        // set self.called to true here
-        if(self.called) return
-        self.called = true
-        self.handler.called = true
         // if there a callback to manage the result is exec and update the data
         if (self._cb) {
           try {
