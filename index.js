@@ -18,14 +18,8 @@ class awsTest {
   }
   exec (params, callback) {
     if(typeof this.handler !== 'function') return Promise.reject(new Error('Handler is not s function: ', typeof this.handler))
-
-
-    if (typeof params === 'function' && !callback) {
-      callback = params
-      params = undefined
-    }
-
-    if(typeof callback === 'function') this.addCallback(callback)
+    
+    this.addCallback(callback)
     this.params = params
     const self = this
     return new Promise(function (resolve, reject) {
@@ -44,7 +38,9 @@ class awsTest {
           }
         }
         // if there a error and is not managed the promise is rejected
-        if(error && !self._cb) return reject(error)
+        if(error && !self._cb) {
+          return reject(error)
+        }
         // resolve the promise with data
         resolve(data)
       }
@@ -80,7 +76,8 @@ class awsTest {
     return this
   }
   addCallback (cb) {
-    (typeof cb === 'function') && (this._cb = cb)
+    if(typeof cb === 'function') this._cb = cb
+    else this._cb = undefined
     return this
   }
   addCtx (ctx) {

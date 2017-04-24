@@ -58,7 +58,7 @@ describe('The test to aws-tester', function () {
     .addHandler(function (params, ctx, cb) {
       ctx.succeed(null, 'test')
     })
-    .exec(function (error, res) {
+    .exec(null,function (error, res) {
       called = true
     })
     .then(function (res) {
@@ -72,7 +72,7 @@ describe('The test to aws-tester', function () {
     .addHandler(function (params, ctx, cb) {
       ctx.done(null, 'test')
     })
-    .exec(function (error, res) {
+    .exec(null,function (error, res) {
       called = true
     })
     .then(function (res) {
@@ -86,7 +86,7 @@ describe('The test to aws-tester', function () {
     .addHandler(function (params, ctx, cb) {
       ctx.fail('error')
     })
-    .exec(function (error, res) {
+    .exec(null,function (error, res) {
       assert(error)
       called = true
     })
@@ -100,7 +100,7 @@ describe('The test to aws-tester', function () {
     .addHandler(function (params, ctx, callback) {
       callback(null, 'data')
     })
-    .exec(function (error, res) {
+    .exec(null,function (error, res) {
       ++i
       assert(res === 'data')
     }).then(function (res) {
@@ -117,7 +117,7 @@ describe('The test to aws-tester', function () {
       assert.equal(typeof ctx.getRemainingTimeInMillis , 'function')
       callback(null, 'data')
     })
-    .exec(function (error, res) {
+    .exec(null,function (error, res) {
       ++i
       assert.equal(res , 'data')
     }).then(function (res) {
@@ -131,7 +131,7 @@ describe('The test to aws-tester', function () {
     .addHandler(function (params, ctx, callback) {
       callback(null, 'data')
     })
-    .exec(function () {
+    .exec(null,function () {
       throw new Error('test of error')
     })
     .catch(function (error) {
@@ -146,7 +146,7 @@ describe('The test to aws-tester', function () {
     .addHandler(function (params, ctx, callback) {
       ctx.fail('error')
     })
-    .exec(function (err) {
+    .exec(null,function (err) {
       called = true
       assert(err)
       done()
