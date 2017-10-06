@@ -12,12 +12,14 @@ class awsTest {
         if (typeof cb === 'function') this._cb = cb;
     }
     exec(params, callback) {
+        console.log('params, callback', params, callback);
         if (typeof this.handler !== 'function') return Promise.reject(new Error('Handler is not a function: ', typeof this.handler));
 
         this.addCallback(callback);
         this.params = params;
         const self = this;
-        if (!callback || typeof callback !== 'function') return isPromise(self, getRemainingTimeInMillis);
+        console.log('self._cb ', self._cb);
+        if (!self._cb) return isPromise(self, getRemainingTimeInMillis);
         isCallback(self, getRemainingTimeInMillis);
         return this;
     }
