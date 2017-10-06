@@ -26,7 +26,7 @@ let handler = function (params, ctx, cb) {
   ctx.done(null, 'test') // the ctx object has the method done, fail and success
 }
 awsTest.addHandler(handler)
-.call({test: 'test'},function (error, res) { // The call function can receive the params and callback
+.exec({test: 'test'},function (error, res) { // The exec function can receive the params and execback
   // to use in the hadler to test
   assert(!error)
   assert(res === 'test')
@@ -41,28 +41,28 @@ awsTest.addHandler(handler)
 ```
 ### `Class aws-lambda-testing`
 #### `aws-lambda-testing([handler, params, cb, ctx])`
-To instance the aws-lambda-testing you can pass the handler to test, the params and callback to be
-used when the handler is called and the context to be used to call it.
+To instance the aws-lambda-testing you can pass the handler to test, the params and execback to be
+used when the handler is execed and the context to be used to exec it.
 
 ### `Instance aws-lambda-testing`
-#### `aws-lambda-testing.exec([params,callback])`
-This method call the handler and return a promise, this promise is resolve with the return valur of callback passed to this
+#### `aws-lambda-testing.exec([params,execback])`
+This method exec the handler and return a promise, this promise is resolve with the return valur of execback passed to this
 function and rejected with every error catched or values passed to ctx.fail or ctx.done.
 #### `aws-lambda-testing.addHandler(handler)`
 This method added the handler to be tested and return itself instance.
 #### `aws-lambda-testing.addParams(params)`
 This method added the params to be passed to the handler and return itself instance.
-#### `aws-lambda-testing.addCallback(callback)`
-This method added the callback to be passed to the handler and return itself instance.
+#### `aws-lambda-testing.addexecback(execback)`
+This method added the execback to be passed to the handler and return itself instance.
 #### `aws-lambda-testing.addCtx(ctx)`
 This method added the context to be passed like thisArg to the handler and return itself instance.
 
 #### `aws-lambda-testing.setTimeout(timeout)`
-This method added the timeout, if the timeout in call is broken a error is throw and passed to callback or promise if is not managed.
+This method added the timeout, if the timeout in exec is broken a error is throw and passed to execback or promise if is not managed.
 
 #### `Ctx object`
 The ctx object has the method done, success and fail. If the error or error like
-passed to done or fail method is not controlled by the callback is passed to reject method.
+passed to done or fail method is not controlled by the execback is passed to reject method.
 # Testing
 
 Running the tests
