@@ -2,7 +2,6 @@
 const assert = require('assert');
 const AwsTest = require('./index');
 const awsTest = new AwsTest((params, ctx) => {
-    console.log('params ', params);
     assert(params.test === 'test');
     ctx.done(null, 'test');
 });
@@ -24,7 +23,6 @@ describe('test to awsTest', () => {
         it('should exec the callback passed', (done) => {
             awsTest
                 .exec({test: 'test'}, (error, res) => {
-                    console.log('error, res = ', error, res);
                     assert(!error);
                     assert(res === 'test');
                     done();
@@ -48,7 +46,6 @@ describe('test to awsTest', () => {
             awsTest
                 .addHandler((params, ctx) => ctx.succeed('test'))
                 .exec(null, (error, res) => {
-                    console.log('error, res ', error, res);
                     assert(res);
                     done(error);
                 });
@@ -127,7 +124,6 @@ describe('test to awsTest', () => {
         before(() => {
             awsTest._cb = null;
             awsTest.addHandler((params, ctx) => {
-                console.log('params ', params);
                 assert(params.test === 'test');
                 ctx.done(null, 'test');
             });
@@ -143,7 +139,6 @@ describe('test to awsTest', () => {
         it('should return a promise reject when the handler is not given', () => new AwsTest()
             .exec()
             .catch((err) => {
-                console.log('err ', err);
                 assert(err);
             })
         );
@@ -152,11 +147,9 @@ describe('test to awsTest', () => {
         it('should exec the callback passed', () => awsTest
                 .exec({test: 'test'})
                 .then((res) => {
-                    console.log('res rpomise = ', res);
                     assert(res === 'test');
                 })
                 .catch((err) => {
-                    console.log('error in promie catched ', err);
                     return Promise.reject(err);
                 })
         );
