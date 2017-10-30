@@ -1,6 +1,6 @@
 
 const assert = require('assert');
-const AwsTest = require('./index');
+const AwsTest = require('../index');
 const awsTest = new AwsTest((params, ctx) => {
     assert(params.test === 'test');
     ctx.done(null, 'test');
@@ -95,24 +95,19 @@ describe('test to awsTest', () => {
                     done();
                 });
         });
-        it('the error is catched by the promise if is throw', (done) => {
-            try {
-                awsTest
-                .addHandler((params, ctx, callback) => {
-                    callback(null, 'data');
-                })
-                .exec(null, () => {
-                    throw new Error('test of error');
-                });
-            } catch (error) {
-                assert(error);
-                done();
-            }
-        });
 
         it('the error is catched when fail is used', (done) => {
             awsTest
                 .addHandler((params, ctx) => ctx.fail('error'))
+                .exec(null, (err) => {
+                    assert(err);
+                    done();
+                });
+        });
+
+        it('the error because timeout is catched', (done) => {
+            awsTest
+                .addHandler((params, ctx) => setTimeout(() => ctx.done(), 5000))
                 .exec(null, (err) => {
                     assert(err);
                     done();
@@ -149,9 +144,7 @@ describe('test to awsTest', () => {
                 .then((res) => {
                     assert(res === 'test');
                 })
-                .catch((err) => {
-                    return Promise.reject(err);
-                })
+                .catch((err) => Promise.reject(err))
         );
 
         it('The test for the callback with cb', () => awsTest
@@ -209,6 +202,9 @@ describe('test to awsTest', () => {
                 .addHandler((params, ctx) => ctx.fail('error'))
                 .exec(null)
                 .catch((err) => assert(err)));
+        it('the error is catched when the timeout is broken', () => awsTest
+                .addHandler((params, ctx) => setTimeout(() => ctx.fail(), 5000))
+                .exec(null)
+                .catch((err) => assert(err)));
     });
 });
-

@@ -1,24 +1,38 @@
 const isPromise = require('./lib/is-promise');
 const isCallback = require('./lib/is-callback');
+const eventEmmiter = require('events');
+const timeOutDefault = 3000;
 
-const getRemainingTimeInMillis = () => 30000;
-
-
-class awsTest {
+class awsTest extends eventEmmiter {
     constructor(handler, params, cb, ctx) {
+        super();
         if (handler) this.addHandler(handler);
         this.ctx = ctx || {};
         this.params = params || {};
+        this.timeout = timeOutDefault;
+        this.init = NaN;
         if (typeof cb === 'function') this._cb = cb;
     }
-    exec(params, callback) {
-        if (typeof this.handler !== 'function') return Promise.reject(new Error('Handler is not a function: ', typeof this.handler));
+    getRemainingTimeInMillis() {
+        if (!this.init) return this.init;
 
+        return Date.now() - this.init;
+    }
+    exec(params, callback) {
+        this.removeAllListeners('timeout');
+        if (typeof this.handler !== 'function') return Promise.reject(new Error('Handler is not a function: ', typeof this.handler));
+        
+        this.setTimeOutEvent();
+        this.init = Date.now();
         this.addCallback(callback);
         this.params = params;
         const self = this;
-        if (!self._cb) return isPromise(self, getRemainingTimeInMillis);
-        isCallback(self, getRemainingTimeInMillis);
+        if (!self._cb) return isPromise(self);
+        isCallback(self);
+        return this;
+    }
+    setTimeOutEvent(){
+        this.timerTimeOut = setTimeout(() => this.emit('timeout'), this.timeout);
         return this;
     }
     addHandler(handler) {
