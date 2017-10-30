@@ -22,7 +22,7 @@ class awsTest extends eventEmmiter {
         this.removeAllListeners('timeout');
         if (typeof this.handler !== 'function') return Promise.reject(new Error('Handler is not a function: ', typeof this.handler));
         
-        this.setTimeOutEvent();
+        this._setTimeOutEvent();
         this.init = Date.now();
         this.addCallback(callback);
         this.params = params;
@@ -31,8 +31,8 @@ class awsTest extends eventEmmiter {
         isCallback(self);
         return this;
     }
-    setTimeOutEvent(){
-        this.timerTimeOut = setTimeout(() => this.emit('timeout'), this.timeout);
+    _setTimeOutEvent(){
+        this._timerTimeOut = setTimeout(() => this.emit('timeout'), this.timeout);
         return this;
     }
     addHandler(handler) {

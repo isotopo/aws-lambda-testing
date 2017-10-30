@@ -42,28 +42,28 @@ awsTest.addHandler(handler)
 ```
 ### `Class aws-lambda-testing`
 #### `aws-lambda-testing([handler, params, cb, ctx])`
-To instance the aws-lambda-testing you can pass the handler to test, the params and execback to be
+To instance the aws-lambda-testing you can pass the handler to test, the params and callback to be
 used when the handler is execed and the context to be used to exec it.
 
 ### `Instance aws-lambda-testing`
 #### `aws-lambda-testing.exec([params,callback]) => self || promise`
-This method exec the handler and return a promise, this promise is resolve with the return valur of execback passed to this
+This method exec the handler and return a promise, this promise is resolve with the return valur of callback passed to this
 function and rejected with every error catched or values passed to ctx.fail or ctx.done. If you do not pass a callback return a promise.
 #### `aws-lambda-testing.addHandler(handler) => self`
 This method added the handler to be tested and return itself instance.
 #### `aws-lambda-testing.addParams(params) => self`
 This method added the params to be passed to the handler and return itself instance.
 #### `aws-lambda-testing.addcallback(callback) => self`
-This method added the execback to be passed to the handler and return itself instance.
+This method added the callback to be passed to the handler and return itself instance.
 #### `aws-lambda-testing.addCtx(ctx) => self`
 This method added the context to be passed like thisArg to the handler and return itself instance.
 
 #### `aws-lambda-testing.setTimeout(timeout)`
-This method added the timeout, if the timeout in exec is broken a error is throw and passed to execback or promise if is not managed.
+This method added the timeout, if the timeout in exec is broken a error is throw and passed to callback or promise if is not managed.
 
 #### `Ctx object`
 The ctx object has the method done, success and fail. If the error or error like
-passed to done or fail method is not controlled by the execback is passed to reject method.
+passed to done or fail method is not controlled by the callback is passed to reject method.
 # Testing
 
 Running the tests
@@ -79,7 +79,7 @@ In lieu of a formal style guide, take care to maintain the existing coding style
 ## Licence
 The MIT License (MIT)
 
-Copyright (c) 2015 JECD .
+Copyright (c) 2015 JECD.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

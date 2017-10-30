@@ -109,7 +109,7 @@ describe('test to awsTest', () => {
             awsTest
                 .addHandler((params, ctx) => setTimeout(() => ctx.done(), 5000))
                 .exec(null, (err) => {
-                    assert(err);
+                    assert(err.message === 'timeout broken: 3000');
                     done();
                 });
         });
@@ -205,6 +205,6 @@ describe('test to awsTest', () => {
         it('the error is catched when the timeout is broken', () => awsTest
                 .addHandler((params, ctx) => setTimeout(() => ctx.fail(), 5000))
                 .exec(null)
-                .catch((err) => assert(err)));
+                .catch((err) => assert(err.message === 'timeout broken: 3000')));
     });
 });
