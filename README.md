@@ -46,7 +46,7 @@ To instance the aws-lambda-testing you can pass the handler to test, the params 
 used when the handler is execed and the context to be used to exec it.
 
 ### `Instance aws-lambda-testing`
-#### `aws-lambda-testing.exec([params,execback]) => self || promise`
+#### `aws-lambda-testing.exec([params,callback]) => self || promise`
 This method exec the handler and return a promise, this promise is resolve with the return valur of execback passed to this
 function and rejected with every error catched or values passed to ctx.fail or ctx.done. If you do not pass a callback return a promise.
 #### `aws-lambda-testing.addHandler(handler) => self`
