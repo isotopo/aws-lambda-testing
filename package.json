@@ -1,6 +1,6 @@
 {
   "name": "aws-lambda-testing",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "class to generate instance to test the lambda functions",
   "main": "index.js",
   "scripts": {

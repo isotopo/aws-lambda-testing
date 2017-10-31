@@ -5,8 +5,8 @@ const awsTest = new AwsTest((params, ctx) => {
     assert(params.test === 'test');
     ctx.done(null, 'test');
 });
+const events = require('../lib/events');
 let i = 0;
-
 describe('test to awsTest', () => {
     describe('The test to aws-tester with callback', () => {
         it('should throw a error if handler is not a function', () => {
@@ -206,5 +206,16 @@ describe('test to awsTest', () => {
                 .addHandler((params, ctx) => setTimeout(() => ctx.fail(), 5000))
                 .exec(null)
                 .catch((err) => assert(err.message === 'timeout broken: 3000')));
+    });
+
+    describe('test to every event pre config', () => {
+        it('should test the every event', async () => {
+            for (const event in events) {
+                const res = await awsTest
+                    .addHandler((params, ctx) => ctx.done(null,params))
+                    .exec(event)
+                assert.deepStrictEqual(res, events[event]);
+            }
+        });
     });
 });
