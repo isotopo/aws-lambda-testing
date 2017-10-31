@@ -11,7 +11,7 @@ describe('test to awsTest', () => {
     describe('The test to aws-tester with callback', () => {
         it('should throw a error if handler is not a function', () => {
             try {
-                awsTest.addHandler();
+                awsTest.setHandler();
             } catch (err) {
                 assert(err);
             }
@@ -31,7 +31,7 @@ describe('test to awsTest', () => {
 
         it('The test for the callback with cb', (done) => {
             awsTest
-                .addHandler((params, ctx, cb) => {
+                .setHandler((params, ctx, cb) => {
                     assert(params.test === 'test');
                     cb(null, 'test');
                 })
@@ -44,7 +44,7 @@ describe('test to awsTest', () => {
 
         it('The test for the callback with success', (done) => {
             awsTest
-                .addHandler((params, ctx) => ctx.succeed('test'))
+                .setHandler((params, ctx) => ctx.succeed('test'))
                 .exec(null, (error, res) => {
                     assert(res);
                     done(error);
@@ -53,7 +53,7 @@ describe('test to awsTest', () => {
 
         it('The test for the callback with done', (done) => {
             awsTest
-                .addHandler((params, ctx) => ctx.done(null, 'test'))
+                .setHandler((params, ctx) => ctx.done(null, 'test'))
                 .exec(null, (error, res) => {
                     assert(res);
                     done(error);
@@ -62,7 +62,7 @@ describe('test to awsTest', () => {
 
         it('The test for the callback with fail', (done) => {
             awsTest
-                .addHandler((params, ctx) => ctx.fail('error'))
+                .setHandler((params, ctx) => ctx.fail('error'))
                 .exec(null, (error, res) => {
                     assert(error);
                     assert(!res);
@@ -72,7 +72,7 @@ describe('test to awsTest', () => {
 
         it('the error is catched by the promise', (done) => {
             awsTest
-                .addHandler((params, ctx, callback) => {
+                .setHandler((params, ctx, callback) => {
                     callback(null, 'data');
                 })
                 .exec(null, (error, res) => {
@@ -85,7 +85,7 @@ describe('test to awsTest', () => {
         it('shoudl call the getRemainingTimeInMillis function', (done) => {
             let i = 0;
             awsTest
-                .addHandler((params, ctx, callback) => {
+                .setHandler((params, ctx, callback) => {
                     assert.equal(typeof ctx.getRemainingTimeInMillis, 'function');
                     callback(null, 'data');
                 })
@@ -98,7 +98,7 @@ describe('test to awsTest', () => {
 
         it('the error is catched when fail is used', (done) => {
             awsTest
-                .addHandler((params, ctx) => ctx.fail('error'))
+                .setHandler((params, ctx) => ctx.fail('error'))
                 .exec(null, (err) => {
                     assert(err);
                     done();
@@ -107,7 +107,7 @@ describe('test to awsTest', () => {
 
         it('the error because timeout is catched', (done) => {
             awsTest
-                .addHandler((params, ctx) => setTimeout(() => ctx.done(), 5000))
+                .setHandler((params, ctx) => setTimeout(() => ctx.done(), 5000))
                 .exec(null, (err) => {
                     assert(err.message === 'timeout broken: 3000');
                     done();
@@ -118,14 +118,14 @@ describe('test to awsTest', () => {
     describe('The test to aws-tester with promise', () => {
         before(() => {
             awsTest._cb = null;
-            awsTest.addHandler((params, ctx) => {
+            awsTest.setHandler((params, ctx) => {
                 assert(params.test === 'test');
                 ctx.done(null, 'test');
             });
         });
         it('should throw a error if handler is not a function', () => {
             try {
-                awsTest.addHandler();
+                awsTest.setHandler();
             } catch (err) {
                 assert(err);
             }
@@ -148,7 +148,7 @@ describe('test to awsTest', () => {
         );
 
         it('The test for the callback with cb', () => awsTest
-                .addHandler((params, ctx, cb) => {
+                .setHandler((params, ctx, cb) => {
                     assert(params.test === 'test');
                     cb(null, 'test');
                 })
@@ -158,24 +158,24 @@ describe('test to awsTest', () => {
                 }));
 
         it('The test for the callback with success', () => awsTest
-                .addHandler((params, ctx) => ctx.succeed('test'))
+                .setHandler((params, ctx) => ctx.succeed('test'))
                 .exec(null)
                 .then((res) => {
                     assert(res);
                 }));
 
         it('The test for the callback with done', () => awsTest
-                .addHandler((params, ctx) => ctx.done(null, 'test'))
+                .setHandler((params, ctx) => ctx.done(null, 'test'))
                 .exec(null)
                 .then((res) => assert(res)));
 
         it('The test for the callback with fail', () => awsTest
-                .addHandler((params, ctx) => ctx.fail('error'))
+                .setHandler((params, ctx) => ctx.fail('error'))
                 .exec(null)
                 .catch((error) => assert(error)));
 
         it('the error is catched by the promise', () => awsTest
-                .addHandler((params, ctx, callback) => {
+                .setHandler((params, ctx, callback) => {
                     callback(null, 'data');
                 })
                 .exec(null)
@@ -187,7 +187,7 @@ describe('test to awsTest', () => {
         it('shoudl call the getRemainingTimeInMillis function', () => {
             let i = 0;
             return awsTest
-                .addHandler((params, ctx, callback) => {
+                .setHandler((params, ctx, callback) => {
                     assert.equal(typeof ctx.getRemainingTimeInMillis, 'function');
                     callback(null, 'data');
                 })
@@ -199,11 +199,11 @@ describe('test to awsTest', () => {
         });
 
         it('the error is catched when fail is used', () => awsTest
-                .addHandler((params, ctx) => ctx.fail('error'))
+                .setHandler((params, ctx) => ctx.fail('error'))
                 .exec(null)
                 .catch((err) => assert(err)));
         it('the error is catched when the timeout is broken', () => awsTest
-                .addHandler((params, ctx) => setTimeout(() => ctx.fail(), 5000))
+                .setHandler((params, ctx) => setTimeout(() => ctx.fail(), 5000))
                 .exec(null)
                 .catch((err) => assert(err.message === 'timeout broken: 3000')));
     });
@@ -212,10 +212,32 @@ describe('test to awsTest', () => {
         it('should test the every event', async () => {
             for (const event in events) {
                 const res = await awsTest
-                    .addHandler((params, ctx) => ctx.done(null,params))
+                    .setHandler((params, ctx) => ctx.done(null,params))
                     .exec(event)
                 assert.deepStrictEqual(res, events[event]);
             }
+        });
+    });
+
+    describe('test memory usage', () => {
+        it('should return the memory usage', async () => {
+            await awsTest.setHandler((params, ctx) => ctx.done(null,params))
+                .exec({})
+            assert(awsTest.getMemoryUsage() > 0)
+        });
+
+        it('should throw a erros if memory usage is over limit', async () => {
+            awsTest.setMemoryUsageLimit(0.1)
+            awsTest.setTimeout(10000)
+            const {error} = await awsTest.setHandler((params, ctx) =>{
+                const data = []
+                for (let i = 0; i < 100000; i++) data.push(i)
+                data.reverse()
+                ctx.done()
+            })
+                .exec({})
+                .catch(error =>({error}))
+            assert(error.message === 'Memory usage is over limit')
         });
     });
 });
