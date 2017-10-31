@@ -77,7 +77,7 @@ There event preconfig to use, if params is a string and equal to:
 This method setted the handler to be tested and return itself instance.
 #### `aws-lambda-testing.setParams(params) => self`
 This method setted the params to be passed to the handler and return itself instance.
-#### `aws-lambda-testing.setcallback(callback) => self`
+#### `aws-lambda-testing.setCallback(callback) => self`
 This method setted the callback to be passed to the handler and return itself instance.
 #### `aws-lambda-testing.setCtx(ctx) => self`
 This method setted the context to be passed like thisArg to the handler and return itself instance.
