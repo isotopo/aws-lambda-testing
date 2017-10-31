@@ -49,6 +49,29 @@ used when the handler is execed and the context to be used to exec it.
 #### `aws-lambda-testing.exec([params,callback]) => self || promise`
 This method exec the handler and return a promise, this promise is resolve with the return valur of callback passed to this
 function and rejected with every error catched or values passed to ctx.fail or ctx.done. If you do not pass a callback return a promise.
+##### `Event pre config`
+
+There event preconfig to use, if params is a string and equal to:
+
+```js
+[ '$CloudFormationCreateRequest',
+  '$SESEmailReceiving',
+  'ScheduledEvent',
+  '$CloudWatchLogs',
+  '$SNS',
+  '$DynamoDBUpdate',
+  '$CognitoSyncTrigger',
+  '$KinesisStreams',
+  '$S3Put',
+  '$S3Delete',
+  '$Lex',
+  '$GatewayProxyRequest',
+  '$GatewayProxyResponse',
+  '$CloudFront',
+  '$Config',
+  '$IoTButton',
+  '$KinesisFirehose' ]
+```
 #### `aws-lambda-testing.addHandler(handler) => self`
 This method added the handler to be tested and return itself instance.
 #### `aws-lambda-testing.addParams(params) => self`
