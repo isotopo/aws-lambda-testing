@@ -9,7 +9,7 @@ class awsTest extends Timeout {
         this.params = params || {};
         this.timeout = timeOutDefault;
         this.init = NaN;
-        this._memoryUsageLimit = Infinity
+        this._memoryUsageLimit = Infinity;
         if (typeof cb === 'function') this._cb = cb;
     }
     getRemainingTimeInMillis() {
@@ -17,6 +17,5 @@ class awsTest extends Timeout {
 
         return Date.now() - this._init;
     }
-
 }
 module.exports = awsTest;

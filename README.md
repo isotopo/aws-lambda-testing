@@ -57,7 +57,7 @@ There event preconfig to use, if params is a string and equal to:
 ```js
 [ '$CloudFormationCreateRequest',
   '$SESEmailReceiving',
-  'ScheduledEvent',
+  '$ScheduledEvent',
   '$CloudWatchLogs',
   '$SNS',
   '$DynamoDBUpdate',
