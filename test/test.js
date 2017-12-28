@@ -1,8 +1,13 @@
 
 const assert = require('assert');
 const AwsTest = require('../index');
-const awsTest = new AwsTest((params, ctx) => {
+const awsTest = new AwsTest((params, ctx, cb) => {
     assert(params.test === 'test');
+    assert(typeof ctx.getRemainingTimeInMillis === 'function');
+    assert(typeof ctx.done === 'function');
+    assert(typeof ctx.fail === 'function');
+    assert(typeof ctx.succeed === 'function');
+    assert(typeof cb === 'function');
     ctx.done(null, 'test');
 });
 const events = require('../lib/events');
@@ -22,7 +27,7 @@ describe('test to awsTest', () => {
 
         it('should exec the callback passed', (done) => {
             awsTest
-                .exec({test: 'test'}, (error, res) => {
+                .exec({ test: 'test' }, (error, res) => {
                     assert(!error);
                     assert(res === 'test');
                     done();
@@ -35,7 +40,7 @@ describe('test to awsTest', () => {
                     assert(params.test === 'test');
                     cb(null, 'test');
                 })
-                .exec({test: 'test'}, (error, res) => {
+                .exec({ test: 'test' }, (error, res) => {
                     assert(!error);
                     assert(res === 'test');
                     done();
@@ -140,49 +145,49 @@ describe('test to awsTest', () => {
 
 
         it('should exec the callback passed', () => awsTest
-                .exec({test: 'test'})
-                .then((res) => {
-                    assert(res === 'test');
-                })
-                .catch((err) => Promise.reject(err))
+            .exec({ test: 'test' })
+            .then((res) => {
+                assert(res === 'test');
+            })
+            .catch((err) => Promise.reject(err))
         );
 
         it('The test for the callback with cb', () => awsTest
-                .setHandler((params, ctx, cb) => {
-                    assert(params.test === 'test');
-                    cb(null, 'test');
-                })
-                .exec({test: 'test'})
-                .then((res) => {
-                    assert(res === 'test');
-                }));
+            .setHandler((params, ctx, cb) => {
+                assert(params.test === 'test');
+                cb(null, 'test');
+            })
+            .exec({ test: 'test' })
+            .then((res) => {
+                assert(res === 'test');
+            }));
 
         it('The test for the callback with success', () => awsTest
-                .setHandler((params, ctx) => ctx.succeed('test'))
-                .exec(null)
-                .then((res) => {
-                    assert(res);
-                }));
+            .setHandler((params, ctx) => ctx.succeed('test'))
+            .exec(null)
+            .then((res) => {
+                assert(res);
+            }));
 
         it('The test for the callback with done', () => awsTest
-                .setHandler((params, ctx) => ctx.done(null, 'test'))
-                .exec(null)
-                .then((res) => assert(res)));
+            .setHandler((params, ctx) => ctx.done(null, 'test'))
+            .exec(null)
+            .then((res) => assert(res)));
 
         it('The test for the callback with fail', () => awsTest
-                .setHandler((params, ctx) => ctx.fail('error'))
-                .exec(null)
-                .catch((error) => assert(error)));
+            .setHandler((params, ctx) => ctx.fail('error'))
+            .exec(null)
+            .catch((error) => assert(error)));
 
         it('the error is catched by the promise', () => awsTest
-                .setHandler((params, ctx, callback) => {
-                    callback(null, 'data');
-                })
-                .exec(null)
-                .then((res) => {
-                    ++i;
-                    assert(res === 'data');
-                }));
+            .setHandler((params, ctx, callback) => {
+                callback(null, 'data');
+            })
+            .exec(null)
+            .then((res) => {
+                ++i;
+                assert(res === 'data');
+            }));
 
         it('shoudl call the getRemainingTimeInMillis function', () => {
             let i = 0;
@@ -199,45 +204,45 @@ describe('test to awsTest', () => {
         });
 
         it('the error is catched when fail is used', () => awsTest
-                .setHandler((params, ctx) => ctx.fail('error'))
-                .exec(null)
-                .catch((err) => assert(err)));
+            .setHandler((params, ctx) => ctx.fail('error'))
+            .exec(null)
+            .catch((err) => assert(err)));
         it('the error is catched when the timeout is broken', () => awsTest
-                .setHandler((params, ctx) => setTimeout(() => ctx.fail(), 5000))
-                .exec(null)
-                .catch((err) => assert(err.message === 'timeout broken: 3000')));
+            .setHandler((params, ctx) => setTimeout(() => ctx.fail(), 5000))
+            .exec(null)
+            .catch((err) => assert(err.message === 'timeout broken: 3000')));
     });
 
     describe('test to every event pre config', () => {
-        it('should test the every event', async () => {
+        it('should test the every event', async() => {
             for (const event in events) {
                 const res = await awsTest
-                    .setHandler((params, ctx) => ctx.done(null,params))
-                    .exec(event)
+                    .setHandler((params, ctx) => ctx.done(null, params))
+                    .exec(event);
                 assert.deepStrictEqual(res, events[event]);
             }
         });
     });
 
     describe('test memory usage', () => {
-        it('should return the memory usage', async () => {
-            await awsTest.setHandler((params, ctx) => ctx.done(null,params))
-                .exec({})
-            assert(awsTest.getMemoryUsage() > 0)
+        it('should return the memory usage', async() => {
+            await awsTest.setHandler((params, ctx) => ctx.done(null, params))
+                .exec({});
+            assert(awsTest.getMemoryUsage() > 0);
         });
 
-        it('should throw a erros if memory usage is over limit', async () => {
-            awsTest.setMemoryUsageLimit(0.1)
-            awsTest.setTimeout(10000)
-            const {error} = await awsTest.setHandler((params, ctx) =>{
-                const data = []
-                for (let i = 0; i < 100000; i++) data.push(i)
-                data.reverse()
-                ctx.done()
+        it('should throw a erros if memory usage is over limit', async() => {
+            awsTest.setMemoryUsageLimit(0.1);
+            awsTest.setTimeout(10000);
+            const { error } = await awsTest.setHandler((params, ctx) => {
+                const data = [];
+                for (let i = 0; i < 100000; i++) data.push(i);
+                data.reverse();
+                ctx.done();
             })
                 .exec({})
-                .catch(error =>({error}))
-            assert(error.message === 'Memory usage is over limit')
+                .catch((error) => ({ error }));
+            assert(error.message === 'Memory usage is over limit');
         });
     });
 });
