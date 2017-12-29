@@ -8,14 +8,14 @@ class awsTest extends Timeout {
         this.ctx = ctx || {};
         this.params = params || {};
         this.timeout = timeOutDefault;
-        this.init = NaN;
+        this._init = NaN;
         this._memoryUsageLimit = Infinity;
         if (typeof cb === 'function') this._cb = cb;
     }
     getRemainingTimeInMillis() {
         if (!this._init) return this._init;
 
-        return Date.now() - this._init;
+        return this._init - Date.now();
     }
 }
 module.exports = awsTest;

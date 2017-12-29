@@ -2,6 +2,7 @@
 const assert = require('assert');
 const AwsTest = require('../index');
 const awsTest = new AwsTest((params, ctx, cb) => {
+    assert(ctx.getRemainingTimeInMillis() > 270000);
     assert(params.test === 'test');
     assert(typeof ctx.getRemainingTimeInMillis === 'function');
     assert(typeof ctx.done === 'function');
@@ -10,6 +11,7 @@ const awsTest = new AwsTest((params, ctx, cb) => {
     assert(typeof cb === 'function');
     ctx.done(null, 'test');
 });
+awsTest.setTimeout(300000);
 const events = require('../lib/events');
 let i = 0;
 describe('test to awsTest', () => {
@@ -112,6 +114,7 @@ describe('test to awsTest', () => {
 
         it('the error because timeout is catched', (done) => {
             awsTest
+                .setTimeout(3000)
                 .setHandler((params, ctx) => setTimeout(() => ctx.done(), 5000))
                 .exec(null, (err) => {
                     assert(err.message === 'timeout broken: 3000');
