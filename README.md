@@ -6,7 +6,7 @@ Module to test the aws-lambda functions
 [![Inline docs](http://inch-ci.org/github/Cereceres/aws-lambda-testing.svg?branch=master)](http://inch-ci.org/github/Cereceres/aws-lambda-testing)
 
 
-aws-lambda-testing for JavaScript
+aws-lambda-testing for JavaScript, support to timeout and memory usage.
 
 # Installing
 
