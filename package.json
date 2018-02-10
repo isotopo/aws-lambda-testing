@@ -25,5 +25,8 @@
   "homepage": "https://github.com/Cereceres/aws-lambda-testing#readme",
   "devDependencies": {
     "mocha": "^2.5.3"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.192.0"
   }
 }

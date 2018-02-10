@@ -41,6 +41,12 @@ awsTest.setHandler(handler)
 })
 ```
 ### `Class aws-lambda-testing`
+
+#### `Class aws-lambda-testing method`
+  
+    assumeRole(arnRole)-> Promise.resolve(res)
+
+set the AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY and AWS_SESSION_TOKEN environment vars.
 #### `aws-lambda-testing([handler, params, cb, ctx])`
 To instance the aws-lambda-testing you can pass the handler to test, the params and callback to be
 used when the handler is execed and the context to be used to exec it.
