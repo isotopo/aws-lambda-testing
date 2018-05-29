@@ -1,6 +1,6 @@
 {
   "name": "aws-lambda-testing",
-  "version": "0.2.6",
+  "version": "1.0.0",
   "description": "class  to test the lambda functions",
   "main": "index.js",
   "scripts": {
@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "aws-sdk": "^2.192.0",
+    "only-some-times": "0.0.5",
     "proxyquire": "^1.8.0"
   }
 }
