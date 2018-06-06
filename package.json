@@ -1,6 +1,6 @@
 {
   "name": "aws-lambda-testing",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "class  to test the lambda functions",
   "main": "index.js",
   "scripts": {
@@ -24,11 +24,11 @@
   },
   "homepage": "https://github.com/Cereceres/aws-lambda-testing#readme",
   "devDependencies": {
-    "mocha": "^2.5.3"
+    "mocha": "^2.5.3",
+    "proxyquire": "^1.8.0"
   },
   "dependencies": {
     "aws-sdk": "^2.192.0",
-    "only-some-times": "0.0.5",
-    "proxyquire": "^1.8.0"
+    "only-some-times": "0.0.5"
   }
 }
