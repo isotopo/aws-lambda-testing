@@ -88,7 +88,7 @@ This method setted the callback to be passed to the handler and return itself in
 #### `aws-lambda-testing.setCtx(ctx) => self`
 This method setted the context to be passed like thisArg to the handler and return itself instance.
 
-#### `aws-lambda-testing.setTimeout(timeout)`
+#### `aws-lambda-testing.setTimeout(timeout) => self`
 This method setted the timeout, if the timeout in exec is broken a error is throw and passed to callback or promise if is not managed.
 #### `aws-lambda-testing.getMemoryUsage() => Number (MB unit)`
 get the memory usage by last process.
