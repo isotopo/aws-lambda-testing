@@ -4,7 +4,7 @@
   "description": "class  to test the lambda functions",
   "main": "index.js",
   "scripts": {
-    "test": "mocha test"
+    "test": "mocha test --exit"
   },
   "repository": {
     "type": "git",
