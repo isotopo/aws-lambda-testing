@@ -99,6 +99,6 @@ describe('The test to aws-tester with promise', () => {
         .setHandler((params, ctx) => setTimeout(() => ctx.fail(), 50))
         .setTimeout(40)
         .exec(null)
-        .catch((err) => assert(err.message === 'timeout broken: 40')));
+        .catch((err) => assert(err.message === 'timeout 40 broken')));
 });
 
