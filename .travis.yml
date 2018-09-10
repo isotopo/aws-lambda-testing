@@ -1,14 +1,7 @@
 language: node_js
-
-node_js: 5
-
-services:
-  - mongodb
-
-notifications:
-  slack: '4yopping:ALhrivGHquJzo5MPODfnRIvI'
-
-script: npm test
-
-after_success:
-  - source ./tasks/deploy.sh
+node_js: 7
+install:
+  - npm install
+  - npm install mocha -g
+script:
+  - mocha test

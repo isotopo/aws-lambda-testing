@@ -1,87 +1,40 @@
-'use strict'
-/**
-* @class This class generate a instance to test the aws lambda handler
-* @param {function} This function is handler
-*/
-class awsTest {
-  constructor (handler, params, cb, ctx) {
-    this.ctx = {}
-    this.params = {}
-    handler && (this.handler = handler)
-    cb && (this._cb = cb)
-    ctx && (this.ctx = ctx)
-    params && (this.params = params)
-    this.cbCalled = false
-  }
-  call (params, callback) {
-    if (typeof params === 'function' && !callback) {
-      callback = params
-      params = undefined
+const Timeout = require('./lib/timeout-class');
+const timeOutDefault = 3000;
+const AWS = require('aws-sdk');
+const defaultName = 'AWS_LAMBDA_TESTING';
+const _sts = new AWS.STS();
+class awsTest extends Timeout {
+    constructor(handler, params, cb, ctx) {
+        super();
+        if (handler) this.setHandler(handler);
+        this.ctx = ctx || {};
+        this.params = params || {};
+        this.timeout = timeOutDefault;
+        this._init = NaN;
+        this._memoryUsageLimit = 128;
+        if (typeof cb === 'function') this._cb = cb;
     }
-    (typeof callback === 'function') && (this._cb = callback)
-    params && (this.params = params)
-    let self = this
-    let promise = new Promise(function (resolve, reject) {
-      let done = function (error, data) {
-        if (!self.cbCalled) {
-          self.cb(resolve, reject, error, data)
-          return
-        } else if (error) {
-          reject(error)
-          return
-        }
-        resolve(data)
-      }
-      let ctx = {
-        done: done,
-        success: function (data) {
-          done(null, data)
-        },
-        fail: function (error) {
-          done(error, null)
-        }
-      }
-      let cb = function (error, data) {
-        self.cb(resolve, reject, error, data)
-      }
-      try {
-        self.handler.call(self.ctx, self.params, ctx, cb)
-      } catch (e) {
-        reject(e)
-      }
-    })
-    this.cbCalled = false
-    return promise
-  }
-  addHandler (handler) {
-    this.handler = handler
-    return this
-  }
-  addParams (params) {
-    this.params = params
-    return this
-  }
-  addCallback (cb) {
-    this._cb = cb
-    return this
-  }
-  addCtx (ctx) {
-    this.ctx = ctx
-    return this
-  }
-  cb (resolve, reject, error, data) {
-      try {
-          this.cbCalled = true
-          if (this._cb) {
-            return resolve(this._cb.apply(this.ctx, [error, data]))
-          } else if (error) {
-            return reject(error)
-          }
-          resolve(data)
-      } catch (err) {
-          reject(err)
-      }
+    getRemainingTimeInMillis() {
+        if (!this._init) return this._init;
 
-  }
+        return this._init - Date.now();
+    }
+
+    static assumeRole(RoleArn, RoleSessionName = defaultName, sts = _sts) {
+        const params = {
+            RoleArn,
+            RoleSessionName,
+            DurationSeconds: 300
+        };
+        return sts.assumeRole(params).promise()
+            .then((res) => {
+                const { AccessKeyId, SecretAccessKey, SessionToken } = res;
+                process.env.AWS_ACCESS_KEY_ID = AccessKeyId;
+                process.env.AWS_SECRET_ACCESS_KEY = SecretAccessKey;
+                process.env.AWS_SESSION_TOKEN = SessionToken;
+
+                return res;
+            });
+    }
 }
-module.exports = awsTest
+module.exports = awsTest;

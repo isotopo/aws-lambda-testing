@@ -1,10 +1,10 @@
 {
   "name": "aws-lambda-testing",
-  "version": "0.0.3",
-  "description": "class to generate instance to test the lambda functions",
+  "version": "1.0.1",
+  "description": "class  to test the lambda functions",
   "main": "index.js",
   "scripts": {
-    "test": "mocha test"
+    "test": "mocha test --exit"
   },
   "repository": {
     "type": "git",
@@ -24,6 +24,11 @@
   },
   "homepage": "https://github.com/Cereceres/aws-lambda-testing#readme",
   "devDependencies": {
-    "mocha": "^2.5.3"
+    "mocha": "^2.5.3",
+    "proxyquire": "^1.8.0"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.192.0",
+    "only-some-times": "0.0.5"
   }
 }
